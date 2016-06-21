@@ -1,407 +1,402 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Transactions;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using DotNetOpenAuth.AspNet;
-using Microsoft.Web.WebPages.OAuth;
-using WebMatrix.WebData;
-using UI.Filters;
-using UI.Models;
+using System.Web.UI;
+using Blog.Model;
+using Blog.BLL;
 
 namespace UI.Controllers
 {
-    [Authorize]
-    [InitializeSimpleMembership]
+
+    [HandleError]
     public class AccountController : Controller
     {
-        //
-        // GET: /Account/Login
 
-        [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        // This constructor is used by the MVC framework to instantiate the controller using
+        // the default forms authentication and membership providers.
+
+        public AccountController()
+            : this(null, null)
         {
-            ViewBag.ReturnUrl = returnUrl;
+        }
+
+        // This constructor is not used by the MVC framework but is instead provided for ease
+        // of unit testing this type. See the comments at the end of this file for more
+        // information.
+        public AccountController(IFormsAuthentication formsAuth, IMembershipService service)
+        {
+            FormsAuth = formsAuth ?? new FormsAuthenticationService();
+            MembershipService = service ?? new AccountMembershipService();
+        }
+
+        public IFormsAuthentication FormsAuth
+        {
+            get;
+            private set;
+        }
+
+        public IMembershipService MembershipService
+        {
+            get;
+            private set;
+        }
+
+        public ActionResult LogOn()
+        {
+            //if (Request.Cookies.Count > 0)
+            //{
+            //    string username= Request.Cookies["username"].Value;
+            //    if (username != null) 
+            //    {
+            //        AuthorEntity entity= AuthorManager.GetAuthorByName(username);
+            //        if (entity != null)
+            //        {
+            //            Session["userinfo"] = entity;
+            //            return RedirectToAction("Index", "Admin");
+            //        }
+            //    }
+            //}
+            ////
             return View();
         }
 
-        //
-        // POST: /Account/Login
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginModel model, string returnUrl)
+        [AcceptVerbs(HttpVerbs.Post)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings",
+            Justification = "Needs to take same parameter type as Controller.Redirect()")]
+        public ActionResult LogOn(string userName, string password, bool rememberMe, string returnUrl)
         {
-            if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
+
+            if (!ValidateLogOn(userName, password))
             {
-                return RedirectToLocal(returnUrl);
+                return View();
             }
 
-            // 如果我们进行到这一步时某个地方出错，则重新显示表单
-            ModelState.AddModelError("", "提供的用户名或密码不正确。");
-            return View(model);
-        }
-
-        //
-        // POST: /Account/LogOff
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
-        {
-            WebSecurity.Logout();
-
-            return RedirectToAction("Index", "Home");
-        }
-
-        //
-        // GET: /Account/Register
-
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Account/Register
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterModel model)
-        {
-            if (ModelState.IsValid)
+            if (rememberMe)
             {
-                // 尝试注册用户
-                try
-                {
-                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
-                    WebSecurity.Login(model.UserName, model.Password);
-                    return RedirectToAction("Index", "Home");
-                }
-                catch (MembershipCreateUserException e)
-                {
-                    ModelState.AddModelError("", ErrorCodeToString(e.StatusCode));
-                }
+                HttpCookie cookie = new HttpCookie("username", userName);
+                cookie.Expires = DateTime.Now.AddMonths(1);
+
+                Response.Cookies.Add(cookie);
             }
+            
 
-            // 如果我们进行到这一步时某个地方出错，则重新显示表单
-            return View(model);
-        }
-
-        //
-        // POST: /Account/Disassociate
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Disassociate(string provider, string providerUserId)
-        {
-            string ownerAccount = OAuthWebSecurity.GetUserName(provider, providerUserId);
-            ManageMessageId? message = null;
-
-            // 只有在当前登录用户是所有者时才取消关联帐户
-            if (ownerAccount == User.Identity.Name)
-            {
-                // 使用事务来防止用户删除其上次使用的登录凭据
-                using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
-                {
-                    bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
-                    if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name).Count > 1)
-                    {
-                        OAuthWebSecurity.DeleteAccount(provider, providerUserId);
-                        scope.Complete();
-                        message = ManageMessageId.RemoveLoginSuccess;
-                    }
-                }
-            }
-
-            return RedirectToAction("Manage", new { Message = message });
-        }
-
-        //
-        // GET: /Account/Manage
-
-        public ActionResult Manage(ManageMessageId? message)
-        {
-            ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "你的密码已更改。"
-                : message == ManageMessageId.SetPasswordSuccess ? "已设置你的密码。"
-                : message == ManageMessageId.RemoveLoginSuccess ? "已删除外部登录。"
-                : "";
-            ViewBag.HasLocalPassword = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
-            ViewBag.ReturnUrl = Url.Action("Manage");
-            return View();
-        }
-
-        //
-        // POST: /Account/Manage
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Manage(LocalPasswordModel model)
-        {
-            bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
-            ViewBag.HasLocalPassword = hasLocalAccount;
-            ViewBag.ReturnUrl = Url.Action("Manage");
-            if (hasLocalAccount)
-            {
-                if (ModelState.IsValid)
-                {
-                    // 在某些出错情况下，ChangePassword 将引发异常，而不是返回 false。
-                    bool changePasswordSucceeded;
-                    try
-                    {
-                        changePasswordSucceeded = WebSecurity.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword);
-                    }
-                    catch (Exception)
-                    {
-                        changePasswordSucceeded = false;
-                    }
-
-                    if (changePasswordSucceeded)
-                    {
-                        return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "当前密码不正确或新密码无效。");
-                    }
-                }
-            }
-            else
-            {
-                // 用户没有本地密码，因此将删除由于缺少
-                // OldPassword 字段而导致的所有验证错误
-                ModelState state = ModelState["OldPassword"];
-                if (state != null)
-                {
-                    state.Errors.Clear();
-                }
-
-                if (ModelState.IsValid)
-                {
-                    try
-                    {
-                        WebSecurity.CreateAccount(User.Identity.Name, model.NewPassword);
-                        return RedirectToAction("Manage", new { Message = ManageMessageId.SetPasswordSuccess });
-                    }
-                    catch (Exception)
-                    {
-                        ModelState.AddModelError("", String.Format("无法创建本地帐户。可能已存在名为“{0}”的帐户。", User.Identity.Name));
-                    }
-                }
-            }
-
-            // 如果我们进行到这一步时某个地方出错，则重新显示表单
-            return View(model);
-        }
-
-        //
-        // POST: /Account/ExternalLogin
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult ExternalLogin(string provider, string returnUrl)
-        {
-            return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
-        }
-
-        //
-        // GET: /Account/ExternalLoginCallback
-
-        [AllowAnonymous]
-        public ActionResult ExternalLoginCallback(string returnUrl)
-        {
-            AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
-            if (!result.IsSuccessful)
-            {
-                return RedirectToAction("ExternalLoginFailure");
-            }
-
-            if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
-            {
-                return RedirectToLocal(returnUrl);
-            }
-
-            if (User.Identity.IsAuthenticated)
-            {
-                // 如果当前用户已登录，则添加新帐户
-                OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, User.Identity.Name);
-                return RedirectToLocal(returnUrl);
-            }
-            else
-            {
-                // 该用户是新用户，因此将要求该用户提供所需的成员名称
-                string loginData = OAuthWebSecurity.SerializeProviderUserId(result.Provider, result.ProviderUserId);
-                ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
-                ViewBag.ReturnUrl = returnUrl;
-                return View("ExternalLoginConfirmation", new RegisterExternalLoginModel { UserName = result.UserName, ExternalLoginData = loginData });
-            }
-        }
-
-        //
-        // POST: /Account/ExternalLoginConfirmation
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult ExternalLoginConfirmation(RegisterExternalLoginModel model, string returnUrl)
-        {
-            string provider = null;
-            string providerUserId = null;
-
-            if (User.Identity.IsAuthenticated || !OAuthWebSecurity.TryDeserializeProviderUserId(model.ExternalLoginData, out provider, out providerUserId))
-            {
-                return RedirectToAction("Manage");
-            }
-
-            if (ModelState.IsValid)
-            {
-                // 将新用户插入到数据库
-                using (UsersContext db = new UsersContext())
-                {
-                    UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
-                    // 检查用户是否已存在
-                    if (user == null)
-                    {
-                        // 将名称插入到配置文件表
-                        db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
-                        db.SaveChanges();
-
-                        OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
-                        OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
-
-                        return RedirectToLocal(returnUrl);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("UserName", "用户名已存在。请输入其他用户名。");
-                    }
-                }
-            }
-
-            ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(provider).DisplayName;
-            ViewBag.ReturnUrl = returnUrl;
-            return View(model);
-        }
-
-        //
-        // GET: /Account/ExternalLoginFailure
-
-        [AllowAnonymous]
-        public ActionResult ExternalLoginFailure()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        [ChildActionOnly]
-        public ActionResult ExternalLoginsList(string returnUrl)
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return PartialView("_ExternalLoginsListPartial", OAuthWebSecurity.RegisteredClientData);
-        }
-
-        [ChildActionOnly]
-        public ActionResult RemoveExternalLogins()
-        {
-            ICollection<OAuthAccount> accounts = OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name);
-            List<ExternalLogin> externalLogins = new List<ExternalLogin>();
-            foreach (OAuthAccount account in accounts)
-            {
-                AuthenticationClientData clientData = OAuthWebSecurity.GetOAuthClientData(account.Provider);
-
-                externalLogins.Add(new ExternalLogin
-                {
-                    Provider = account.Provider,
-                    ProviderDisplayName = clientData.DisplayName,
-                    ProviderUserId = account.ProviderUserId,
-                });
-            }
-
-            ViewBag.ShowRemoveButton = externalLogins.Count > 1 || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
-            return PartialView("_RemoveExternalLoginsPartial", externalLogins);
-        }
-
-        #region 帮助程序
-        private ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
+            if (!String.IsNullOrEmpty(returnUrl))
             {
                 return Redirect(returnUrl);
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Admin");
             }
         }
 
-        public enum ManageMessageId
+        public ActionResult LogOff()
         {
-            ChangePasswordSuccess,
-            SetPasswordSuccess,
-            RemoveLoginSuccess,
+            HttpCookie cookie = Request.Cookies["username"];
+            cookie.Expires = DateTime.Now.AddDays(-1);
+            Response.Cookies.Add(cookie);
+            Response.Cookies.Clear();
+            Session.Remove("userinfo");
+            Session.Abandon();
+
+            return RedirectToAction("Index", "Home");
         }
 
-        internal class ExternalLoginResult : ActionResult
+        public ActionResult Register()
         {
-            public ExternalLoginResult(string provider, string returnUrl)
+
+            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+
+            return View();
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult Register(string userName, string email, string password, string confirmPassword)
+        {
+
+            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+
+            if (ValidateRegistration(userName, email, password, confirmPassword))
             {
-                Provider = provider;
-                ReturnUrl = returnUrl;
+               
+                AuthorEntity t_AuthorEntity = new AuthorEntity();
+                t_AuthorEntity.Username = userName;
+                t_AuthorEntity.Email = email;
+                t_AuthorEntity.Islock = "n";
+                t_AuthorEntity.Password = password;
+                t_AuthorEntity.Role_id=2;
+
+                int i = AuthorManager.Insertauthor(t_AuthorEntity);
+                if (i > 0)
+                {
+                    return RedirectToAction("Index", "Home");
+                }   
+                else
+                {
+                    ModelState.AddModelError("_FORM", "创建失败，请稍后再试");
+                }
+
             }
 
-            public string Provider { get; private set; }
-            public string ReturnUrl { get; private set; }
+            // If we got this far, something failed, redisplay form
+            return View();
+        }
 
-            public override void ExecuteResult(ControllerContext context)
+        [Authorize]
+        public ActionResult ChangePassword()
+        {
+
+            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+
+            return View();
+        }
+
+        [Authorize]
+        [AcceptVerbs(HttpVerbs.Post)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes",
+            Justification = "Exceptions result in password not being changed.")]
+        public ActionResult ChangePassword(string currentPassword, string newPassword, string confirmPassword)
+        {
+
+            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+
+            if (!ValidateChangePassword(currentPassword, newPassword, confirmPassword))
             {
-                OAuthWebSecurity.RequestAuthentication(Provider, ReturnUrl);
+                return View();
             }
+
+            try
+            {
+                AuthorEntity entity=(AuthorEntity)Session["userinfo"];
+
+                if (entity.Password.Equals(currentPassword))
+                {
+                    entity.Password = newPassword;
+                    Session["userinfo"] = entity;
+                    AuthorManager.UpdateAuthor(entity);
+
+                    return RedirectToAction("ChangePasswordSuccess");
+                }
+                else
+                {
+                    ModelState.AddModelError("_FORM", "The current password is incorrect or the new password is invalid.");
+                    return View();
+                }
+            }
+            catch
+            {
+                ModelState.AddModelError("_FORM", "The current password is incorrect or the new password is invalid.");
+                return View();
+            }
+        }
+
+        public ActionResult ChangePasswordSuccess()
+        {
+
+            return View();
+        }
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (filterContext.HttpContext.User.Identity is WindowsIdentity)
+            {
+                throw new InvalidOperationException("Windows authentication is not supported.");
+            }
+        }
+
+        #region Validation Methods
+
+        private bool ValidateChangePassword(string currentPassword, string newPassword, string confirmPassword)
+        {
+            if (String.IsNullOrEmpty(currentPassword))
+            {
+                ModelState.AddModelError("currentPassword", "You must specify a current password.");
+            }
+            if (newPassword == null || newPassword.Length < MembershipService.MinPasswordLength)
+            {
+                ModelState.AddModelError("newPassword",
+                    String.Format(CultureInfo.CurrentCulture,
+                         "You must specify a new password of {0} or more characters.",
+                         MembershipService.MinPasswordLength));
+            }
+
+            if (!String.Equals(newPassword, confirmPassword, StringComparison.Ordinal))
+            {
+                ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
+            }
+
+            return ModelState.IsValid;
+        }
+
+        private bool ValidateLogOn(string userName, string password)
+        {
+            if (String.IsNullOrEmpty(userName))
+            {
+                ModelState.AddModelError("username", "You must specify a username.");
+            }
+            if (String.IsNullOrEmpty(password))
+            {
+                ModelState.AddModelError("password", "You must specify a password.");
+            }
+
+            AuthorEntity entity=AuthorManager.GetAuthorByName(userName);
+            Session["userinfo"] = entity;
+
+            if (entity != null && entity.Password.Equals(password))
+            {
+                return true;
+            }
+            else
+            {
+                ModelState.AddModelError("_FORM", "The username or password provided is incorrect.");
+                return true;
+            }         
+
+
+            
+        }
+
+        private bool ValidateRegistration(string userName, string email, string password, string confirmPassword)
+        {
+            if (String.IsNullOrEmpty(userName))
+            {
+                ModelState.AddModelError("username", "You must specify a username.");
+            }
+            if (String.IsNullOrEmpty(email))
+            {
+                ModelState.AddModelError("email", "You must specify an email address.");
+            }
+            if (password == null || password.Length < 6)
+            {
+                ModelState.AddModelError("password",
+                    String.Format(CultureInfo.CurrentCulture,
+                         "You must specify a password of {0} or more characters.",
+                         6));
+            }
+            if (!String.Equals(password, confirmPassword, StringComparison.Ordinal))
+            {
+                ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
+            }
+
+
+            return ModelState.IsValid;
         }
 
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)
         {
-            // 请参见 http://go.microsoft.com/fwlink/?LinkID=177550 以查看
-            // 状态代码的完整列表。
+            // See http://msdn.microsoft.com/en-us/library/system.web.security.membershipcreatestatus.aspx for
+            // a full list of status codes.
             switch (createStatus)
             {
                 case MembershipCreateStatus.DuplicateUserName:
-                    return "用户名已存在。请输入其他用户名。";
+                    return "Username already exists. Please enter a different user name.";
 
                 case MembershipCreateStatus.DuplicateEmail:
-                    return "该电子邮件地址的用户名已存在。请输入其他电子邮件地址。";
+                    return "A username for that e-mail address already exists. Please enter a different e-mail address.";
 
                 case MembershipCreateStatus.InvalidPassword:
-                    return "提供的密码无效。请输入有效的密码值。";
+                    return "The password provided is invalid. Please enter a valid password value.";
 
                 case MembershipCreateStatus.InvalidEmail:
-                    return "提供的电子邮件地址无效。请检查该值并重试。";
+                    return "The e-mail address provided is invalid. Please check the value and try again.";
 
                 case MembershipCreateStatus.InvalidAnswer:
-                    return "提供的密码取回答案无效。请检查该值并重试。";
+                    return "The password retrieval answer provided is invalid. Please check the value and try again.";
 
                 case MembershipCreateStatus.InvalidQuestion:
-                    return "提供的密码取回问题无效。请检查该值并重试。";
+                    return "The password retrieval question provided is invalid. Please check the value and try again.";
 
                 case MembershipCreateStatus.InvalidUserName:
-                    return "提供的用户名无效。请检查该值并重试。";
+                    return "The user name provided is invalid. Please check the value and try again.";
 
                 case MembershipCreateStatus.ProviderError:
-                    return "身份验证提供程序返回了错误。请验证您的输入并重试。如果问题仍然存在，请与系统管理员联系。";
+                    return "The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
 
                 case MembershipCreateStatus.UserRejected:
-                    return "已取消用户创建请求。请验证您的输入并重试。如果问题仍然存在，请与系统管理员联系。";
+                    return "The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
 
                 default:
-                    return "发生未知错误。请验证您的输入并重试。如果问题仍然存在，请与系统管理员联系。";
+                    return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
             }
         }
         #endregion
+    }
+
+    // The FormsAuthentication type is sealed and contains static members, so it is difficult to
+    // unit test code that calls its members. The interface and helper class below demonstrate
+    // how to create an abstract wrapper around such a type in order to make the AccountController
+    // code unit testable.
+
+    public interface IFormsAuthentication
+    {
+        void SignIn(string userName, bool createPersistentCookie);
+        void SignOut();
+    }
+
+    public class FormsAuthenticationService : IFormsAuthentication
+    {
+        public void SignIn(string userName, bool createPersistentCookie)
+        {
+            FormsAuthentication.SetAuthCookie(userName, createPersistentCookie);
+        }
+        public void SignOut()
+        {
+            FormsAuthentication.SignOut();
+        }
+    }
+
+    public interface IMembershipService
+    {
+        int MinPasswordLength { get; }
+
+        bool ValidateUser(string userName, string password);
+        MembershipCreateStatus CreateUser(string userName, string password, string email);
+        bool ChangePassword(string userName, string oldPassword, string newPassword);
+    }
+
+    public class AccountMembershipService : IMembershipService
+    {
+        private MembershipProvider _provider;
+
+        public AccountMembershipService()
+            : this(null)
+        {
+        }
+
+        public AccountMembershipService(MembershipProvider provider)
+        {
+            _provider = provider ?? Membership.Provider;
+        }
+
+        public int MinPasswordLength
+        {
+            get
+            {
+                return _provider.MinRequiredPasswordLength;
+            }
+        }
+
+        public bool ValidateUser(string userName, string password)
+        {
+            return _provider.ValidateUser(userName, password);
+        }
+
+        public MembershipCreateStatus CreateUser(string userName, string password, string email)
+        {
+            MembershipCreateStatus status;
+            _provider.CreateUser(userName, password, email, null, null, true, null, out status);
+            return status;
+        }
+
+        public bool ChangePassword(string userName, string oldPassword, string newPassword)
+        {
+            MembershipUser currentUser = _provider.GetUser(userName, true /* userIsOnline */);
+            return currentUser.ChangePassword(oldPassword, newPassword);
+        }
     }
 }

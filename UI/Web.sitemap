@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+    <siteMapNode>
+        <siteMapNode url="Default.aspx" title="博客天地"  description="BlogWorld" />
+        <siteMapNode url="" title="收藏家"  description="BlogWorld" />
+        <siteMapNode url="" title="相册"  description="PhotoWorld" />
+        <siteMapNode url="" title="精彩瞬间"  description="WavWorld" />
+        <siteMapNode url="" title="音乐分享"  description="MusicWorld" />
+        <siteMapNode url="" title="联系我"  description="ConnectToMe" />
+    </siteMapNode>
+</siteMap>

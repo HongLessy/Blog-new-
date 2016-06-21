@@ -5,21 +5,21 @@ using System.Text;
 using System.Data.OleDb;
 using System.Data;
 
-namespace Blogo.DBUtility
+namespace Blog.DBUtility
 {
     /// <summary>
     /// 实现所有对SQL Server数据库的所有访问操作
     /// </summary>
     public class OLEDBHelp
     {
-        private static string _connStr = @"provider=Microsoft.OLEDB.JET.4.0;Data Source=E:\VS2005_Project\NorthWind\Blogo\DB\NNBlogo.mdb";
+        private static string _connStr = @"provider=Microsoft.OLEDB.JET.4.0;Data Source=E:\VS2005_Project\NorthWind\Blog\DB\NNBlog.mdb";
         private static OleDbConnection oledbcon;
 
         /// <summary>
         /// 获取一个可用于数据库操作的连接类
         /// </summary>
         private static OleDbConnection Connection
-        {
+        {            
             get
             {
                 if (oledbcon == null)

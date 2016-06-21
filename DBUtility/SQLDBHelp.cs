@@ -5,14 +5,14 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace Blogo.DBUtility
+namespace Blog.DBUtility
 {
     /// <summary>
     /// 实现所有对SQL Server数据库的所有访问操作
     /// </summary>
     public class SqlDBHelp
     {
-        private static string _connStr = "server=.uid=sa;pwd=;database=NNBlogo";
+        private static string _connStr = "server=ADMIN-PC;uid=wyh;pwd=wyh19950825;database=Blog";
         private static SqlConnection sqlcon;
 
         /// <summary>

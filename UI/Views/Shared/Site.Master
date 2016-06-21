@@ -1,50 +1,45 @@
-Ôªø<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
-<!DOCTYPE html>
-<html lang="zh">
-    <head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <meta charset="utf-8" />
-        <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
-        <link href="<%: Url.Content("~/favicon.ico") %>" rel="shortcut icon" type="image/x-icon" />
-        <meta name="viewport" content="width=device-width" />
-        <%: Styles.Render("~/Content/css") %>
-        <%: Scripts.Render("~/bundles/modernizr") %>
-    </head>
-    <body>
-        <header>
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p class="site-title"><%: Html.ActionLink("Â∞Ü‰Ω†ÁöÑÂæΩÊ†áÊîæÁΩÆÂú®Ê≠§Â§Ñ", "Index", "Home") %></p>
-                </div>
-                <div class="float-right">
-                    <section id="login">
-                        <%: Html.Partial("_LoginPartial") %>
-                    </section>
-                    <nav>
-                        <ul id="menu">
-                            <li><%: Html.ActionLink("‰∏ªÈ°µ", "Index", "Home") %></li>
-                            <li><%: Html.ActionLink("ÂÖ≥‰∫é", "About", "Home") %></li>
-                            <li><%: Html.ActionLink("ËÅîÁ≥ªÊñπÂºè", "Contact", "Home") %></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </header>
-        <div id="body">
-            <asp:ContentPlaceHolder ID="FeaturedContent" runat="server" />
-            <section class="content-wrapper main-content clear-fix">
-                <asp:ContentPlaceHolder ID="MainContent" runat="server" />
-            </section>
-        </div>
-        <footer>
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p>&copy; <%: DateTime.Now.Year %> - ÊàëÁöÑ ASP.NET MVC Â∫îÁî®Á®ãÂ∫è</p>
-                </div>
-            </div>
-        </footer>
+<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
+<%@ Import Namespace="UI.App_Code" %>
 
-        <%: Scripts.Render("~/bundles/jquery") %>
-        <asp:ContentPlaceHolder ID="ScriptsSection" runat="server" />
-    </body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta  http-equiv="Content-Type" content="text/html;charset=gb2312" />
+    <asp:ContentPlaceHolder  ID="head" runat="server" >
+        <title>Hi</title>
+    </asp:ContentPlaceHolder>
+    <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div id="outer">
+        <div id="upbg"></div>
+        <div id="inner">
+            <div id="header">
+                <h1>NN≤©øÕ</h1>                
+            </div>
+            <div id="splash"/>
+            <div id="menu">
+                <%= Html.Menu()%>
+            </div>
+            
+            <div id="primarycontent">
+                <!--◊Û ˝æ›÷˜ÃÂ≤ø∑÷ø™ º -->
+                <asp:ContentPlaceHolder ID="ContentPlaceHolderPrimary" runat="server">
+                </asp:ContentPlaceHolder>
+                <!--◊Û ˝æ›÷˜ÃÂ≤ø∑÷Ω· ¯ -->
+            </div>
+            <div id="secondarycontent">
+                <!--”“¡–±Ì≤ø∑÷ø™ º -->
+                <asp:ContentPlaceHolder ID="ContentPlaceHolderSecondary" runat="server">
+                </asp:ContentPlaceHolder>
+                <!--”“¡–±Ì≤ø∑÷Ω· ¯ -->
+            </div>
+            
+            <div id="footer">
+                ±±∑ÁÕ¯NNBlogoœµÕ≥<a href="http://www.ibeifeng.com">ª˘”⁄ASP.Netºº ı∂‡”√ªß≤©øÕœµÕ≥</a><br />
+            </div>
+        </div>
+    </div>
+</body>
 </html>

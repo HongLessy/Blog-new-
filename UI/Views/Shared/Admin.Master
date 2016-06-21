@@ -1,0 +1,30 @@
+﻿<%@ Master Language="C#" MasterPageFile="Site.Master" Inherits="System.Web.Mvc.ViewMasterPage" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <asp:ContentPlaceHolder ID="head" runat="server">
+        <title></title>
+    </asp:ContentPlaceHolder>
+</asp:Content>
+
+<asp:Content ID="ContentPrimary" ContentPlaceHolderID="ContentPlaceHolderPrimary" runat="server">
+    <asp:ContentPlaceHolder ID="ContentPlaceHolderPage" runat="server">
+        
+    </asp:ContentPlaceHolder>
+</asp:Content>
+
+<asp:Content ID="ContentSecondary" ContentPlaceHolderID="ContentPlaceHolderSecondary" runat="server">
+    <h3>管理面板</h3>
+    <div class="content">
+        <ul class="linklist">
+            <li><%= Html.ActionLink("管理随笔、文章","index")%></li>
+            <li><%= Html.ActionLink("管理评论","AdminCommets")%></li>
+            <li><%= Html.ActionLink("管理分类","AdminTags")%></li>
+            <li><%= Html.ActionLink("管理用户","AdminAuthors")%></li>
+            <li><%= Html.ActionLink("管理文件","AdminFiles")%></li>
+            <li><%= Html.ActionLink("管理日志","AdminLog")%></li>
+            <li><%= Html.ActionLink("管理基本信息","AdminSetupEdit")%></li>
+        </ul>
+        <br />
+        <% Html.RenderPartial("LogOnUserControl");%>
+    </div>
+</asp:Content>

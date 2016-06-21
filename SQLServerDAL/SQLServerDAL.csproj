@@ -7,8 +7,8 @@
     <ProjectGuid>{FDC76F82-DDFB-435E-8698-E62020FE2E42}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SQLServerDAL</RootNamespace>
-    <AssemblyName>SQLServerDAL</AssemblyName>
+    <RootNamespace>Blog.SqlServerDAL</RootNamespace>
+    <AssemblyName>Blog.SqlServerDAL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,7 +39,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Author.cs" />
+    <Compile Include="Blogentrie.cs" />
+    <Compile Include="Blogtype.cs" />
+    <Compile Include="Blog_Tag.cs" />
+    <Compile Include="Comment.cs" />
+    <Compile Include="File.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Model.cs" />
+    <Compile Include="Personsetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Role.cs" />
+    <Compile Include="Tag.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DBUtility\DBUtility.csproj">
+      <Project>{66d2e11d-93e9-4293-8a60-aa10b837d184}</Project>
+      <Name>DBUtility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IDAL\IDAL.csproj">
+      <Project>{2af4a139-be5d-4b50-8cb3-ea55d3177960}</Project>
+      <Name>IDAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{323a7eb8-a87d-48a4-a2c9-c4978f5da873}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

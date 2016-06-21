@@ -1,0 +1,57 @@
+﻿<%@ Master Language="C#" MasterPageFile="Site.Master" Inherits="System.Web.Mvc.ViewMasterPage" %>
+<%@ Import Namespace="Blogo.Model"%>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <asp:ContentPlaceHolder ID="head" runat="server">
+        <title></title>
+    </asp:ContentPlaceHolder>
+</asp:Content>
+
+<asp:Content ID="ContentPrimary" ContentPlaceHolderID="ContentPlaceHolderPrimary" runat="server">
+    <asp:ContentPlaceHolder ID="ContentPlaceHolderPage" runat="server">
+    
+    </asp:ContentPlaceHolder>
+</asp:Content>
+
+<asp:Content ID="ContentSecondary" ContentPlaceHolderID="ContentPlaceHolderSecondary" runat="server">
+    <div class="Lable">分类</div>
+    <div class="content">
+        <ul class="linklist">            
+            <li><%= Html.ActionLink("所有分类", "TagCloud", "Tag")%></li>
+        
+            <% foreach (var t in (IEnumerable<Blogo.Model.TagEntity>)ViewData["Tags"])
+               { %>
+                <li>
+                    <%= Html.ActionLink(t.TagName + "(" + t.Tag_id + ")", "BlogByTag", "Blog", new { id=t.Tag_id,page=1})%>
+                </li>   
+            <%} %>
+        </ul>
+    </div>
+    
+    <div class="Lable">文章</div>
+    <div class="content">
+        <ul class="linklist">
+            <li><%= Html.ActionLink(">所有文章<","BlogArticles","Blog")%></li>
+        </ul>
+    </div>
+    
+    <div class="Lable"></div>
+    <div class="content">
+        <ul class="linklist">
+            <%foreach(var m in (IEnumerable<Month>)ViewData["Months"]) {%>
+                <li>
+                    <%= Html.ActionLink(m.year + "年" + m.month + "月(" + m.number + ")", "BlogByMonth", new { page=1,year=m.year,month=m.month},null)%>
+                </li>
+            <%} %>
+        </ul>
+    </div>
+    
+    <div class="Lable">订阅</div>
+    <div class="content">
+        <ul class="linklist">
+            <li><a href="/Blog/RSSBlogs">随笔</a></li>
+            <li><a href="/Blog/RSSArticles">文章</a></li>
+             <li><a href="/Blog/RSSComments">评论</a></li>
+        </ul>
+    </div>
+</asp:Content>

@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{80284DC8-2173-43F8-99C2-58831AE412F0}</ProjectGuid>
+    <ProjectGuid>{C1F7F454-F328-4158-9315-A1BCF46FA96B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UI.Tests</RootNamespace>
@@ -124,7 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UI\UI.csproj">
-      <Project>{ADDFC11A-0867-47E0-9ED5-4E9E8398403C}</Project>
+      <Project>{2CC7BF59-8A88-47A5-BD94-07DA8942DD16}</Project>
       <Name>UI</Name>
     </ProjectReference>
   </ItemGroup>

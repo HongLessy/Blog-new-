@@ -7,8 +7,8 @@
     <ProjectGuid>{2AF4A139-BE5D-4B50-8CB3-EA55D3177960}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IDAL</RootNamespace>
-    <AssemblyName>IDAL</AssemblyName>
+    <RootNamespace>Blog.IDAL</RootNamespace>
+    <AssemblyName>Blog.IDAL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,7 +39,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAuthor.cs" />
+    <Compile Include="IBlogentrie.cs" />
+    <Compile Include="IBlogtype.cs" />
+    <Compile Include="IBlog_Tag.cs" />
+    <Compile Include="IComment.cs" />
+    <Compile Include="IFile.cs" />
+    <Compile Include="ILog.cs" />
+    <Compile Include="IModel.cs" />
+    <Compile Include="IPersonsetting.cs" />
+    <Compile Include="IRole.cs" />
+    <Compile Include="ITag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{323a7eb8-a87d-48a4-a2c9-c4978f5da873}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
