@@ -57,5 +57,35 @@ namespace UI.Controllers
             return View(blog);
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult AdminBlogEdit(int id, FormCollection form)
+        {
+            AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+            BlogentrieEntity blog = BlogentrieManager.SelectBlogentrieByID(id);
+            blog.Title = form["title"].ToString();
+            string[] selectedTags = form["TagCheckBox"].Split(new char[] { ',' });
+
+            List<TagEntity> tags = TagManager.GetAllTag().Select(p => p).Where(p => p.Author_id == entity.Author_id).ToList();
+
+            for (int i = 0; i < selectedTags.Length; i++)
+            {
+                if (selectedTags[i] == "true")
+                {
+                    blog.Blogtype_id = tags[i].Tag_id;
+                }
+            }
+
+            blog.Description = form["description"];
+            blog.Type = form["type"];
+            blog.Allowcomment = form["CommentCheckBox"].Contains("true") ? "y" : "n";
+            blog.Markprivate = form["PrivateCheckBox"].Contains("true") ? "y" : "n";
+            blog.Body = form["body"];
+            blog.Datemodified = DateTime.Now;
+
+            BlogentrieManager.UpdateBlogentrie(blog);
+
+            return RedirectToAction("index", new { page = "1" });
+        }
+
     }
 }

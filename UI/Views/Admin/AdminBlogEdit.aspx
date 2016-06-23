@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Admin.Master" Inherits="System.Web.Mvc.ViewPage<Blog.Model.BlogentrieEntity>" %>
-<%@ Import Namespace ="Blog.BLL" %>
 <%@ Import Namespace="Blog.Model" %>
+<%@ Import Namespace="Blog.BLL" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolderPage" runat="server">
 
       <h3>修改随笔、文章</h3>
@@ -32,7 +33,8 @@
             <p>
                 <label for="title">分类：</label>
                <% 
-                    Blog_TagEntity blogtagentity = Blog_TagManager.SelectBlog_TagByBlogID(Model.Blog_id);         
+                    Blog_TagEntity blogtagentity = Blog_TagManager.SelectBlog_TagByBlogID(Model.Blog_id);
+           
                 %>
                 <% foreach (var tag in (List<TagEntity>)ViewData["tag"] ) { %>
                   
@@ -41,7 +43,7 @@
                    <%  =Html.CheckBox("TagCheckBox",true, new {  id=tag.TagName }) %>                  
                   <label for="<% =tag.TagName %>" ><% =tag.TagName %></label>
                   <br/><span class="style1"><label for="title">分类：</label></span>
-                  <% }  
+                   <% } 
                       else                     
                      {   
                          %>

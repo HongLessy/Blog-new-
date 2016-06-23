@@ -181,7 +181,7 @@ namespace Blog.SqlServerDAL
             new SqlParameter("@Islock",t_Blogentrie.Islock),
             new SqlParameter("@Blogtype_id",t_Blogentrie.Blogtype_id)
             };
-            int i=SqlDBHelp.GetExecute("update Blogentries set blog_id=@Blog_id,title=@Title,description=@Description,type=@Type,allowcomment=@Allowcomment,markprivate=@Markprivate,body=@Body,datecreated=@Datecreated,datepublished=@Datepublished,datemodified=@Datemodified,islock=@Islock where blog_id=@Blog_id", p) ;
+            int i=SqlDBHelp.GetExecute("update Blogentries set author_id=@Author_id,title=@Title,description=@Description,type=@Type,allowcomment=@Allowcomment,markprivate=@Markprivate,body=@Body,datecreated=@Datecreated,datepublished=@Datepublished,datemodified=@Datemodified,islock=@Islock where blog_id=@Blog_id", p) ;
             return i;
         }
         
