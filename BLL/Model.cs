@@ -48,7 +48,7 @@ namespace Blog.BLL
             IList<ModelEntity> temp=null;
             try
             {
-                temp=GetAllModel();
+                temp = dal.GetAllModel();
             }
             catch(Exception ex)
             {
@@ -69,7 +69,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=InsertModel(t_Model);
+                i = dal.InsertModel(t_Model);
             }
             catch(Exception ex)
             {
@@ -84,7 +84,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=UpdateModel(t_Model);
+                i = dal.UpdateModel(t_Model);
             }
             catch(Exception ex)
             {
@@ -99,7 +99,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=DeleteModel(t_model_id);
+                i = dal.DeleteModel(t_model_id);
             }
             catch(Exception ex)
             {

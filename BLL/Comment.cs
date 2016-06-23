@@ -48,7 +48,7 @@ namespace Blog.BLL
             IList<CommentEntity> temp=null;
             try
             {
-                temp=GetAllComment();
+                temp = dal.GetAllComment();
             }
             catch(Exception ex)
             {
@@ -64,7 +64,7 @@ namespace Blog.BLL
            IList<CommentEntity> temp=null;
            try
             {
-                temp=GetAllCommentByblog_id(t_blog_id);
+                temp = dal.GetAllCommentByblog_id(t_blog_id);
             }
             catch(Exception ex)
             {
@@ -82,7 +82,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=InsertComment(t_Comment);
+                i = dal.InsertComment(t_Comment);
             }
             catch(Exception ex)
             {
@@ -97,7 +97,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=UpdateComment(t_Comment);
+                i = dal.UpdateComment(t_Comment);
             }
             catch(Exception ex)
             {
@@ -112,7 +112,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=DeleteComment(t_comment_id);
+                i = dal.DeleteComment(t_comment_id);
             }
             catch(Exception ex)
             {

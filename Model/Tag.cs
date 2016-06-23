@@ -12,6 +12,15 @@ namespace Blog.Model
 	{
 		protected int _tag_id;
 		protected string _tagName = String.Empty;
+        protected int _author_id;
+
+        public int Author_id
+        {
+            get { return _author_id; }
+            set { _author_id = value; }
+        }
+
+      
 	
 		public TagEntity()
 		{

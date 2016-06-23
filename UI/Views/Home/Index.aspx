@@ -1,8 +1,14 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolderPrimary" runat="server">
 
-    <h2>Index</h2>
-    ╡Бйтоб
+    <ul>
+        <li>
+            <a href="../Account/LogOn">╣гб╪</a>
+        </li>
+        <li>
+            <a href="../Account/Register">в╒╡А</a>
+        </li>
+    </ul>
 
 </asp:Content>
 

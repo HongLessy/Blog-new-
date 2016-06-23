@@ -31,6 +31,8 @@ namespace Blog.IDAL
           int UpdateBlog_Tag(Blog_TagEntity t_Blog_Tag);
         //删除操作
           int DeleteBlog_Tag(int t_blog_tag_id);
+
+          Blog_TagEntity SelectBlog_TagByBlogID(int t_blog_id);
        
     }
 }

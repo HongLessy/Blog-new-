@@ -41,6 +41,19 @@ namespace Blog.BLL
             }
             return temp;
         }
+        public static Blog_TagEntity SelectBlog_TagByBlogID(int t_blog_id)
+        {
+            Blog_TagEntity temp = null;
+            try
+            {
+                temp = dal.SelectBlog_TagByBlogID(t_blog_id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return temp;
+        }
         
         //根据主键查询整个表
         public static IList<Blog_TagEntity> GetAllBlog_Tag()
@@ -48,7 +61,7 @@ namespace Blog.BLL
             IList<Blog_TagEntity> temp=null;
             try
             {
-                temp=GetAllBlog_Tag();
+                temp=dal.GetAllBlog_Tag();
             }
             catch(Exception ex)
             {
@@ -64,7 +77,7 @@ namespace Blog.BLL
            IList<Blog_TagEntity> temp=null;
            try
             {
-                temp=GetAllBlog_TagBytag_id(t_tag_id);
+                temp=dal.GetAllBlog_TagBytag_id(t_tag_id);
             }
             catch(Exception ex)
             {
@@ -82,7 +95,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=InsertBlog_Tag(t_Blog_Tag);
+                i = dal.InsertBlog_Tag(t_Blog_Tag);
             }
             catch(Exception ex)
             {
@@ -97,7 +110,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=UpdateBlog_Tag(t_Blog_Tag);
+                i = dal.UpdateBlog_Tag(t_Blog_Tag);
             }
             catch(Exception ex)
             {
@@ -112,7 +125,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=DeleteBlog_Tag(t_blog_tag_id);
+                i = dal.DeleteBlog_Tag(t_blog_tag_id);
             }
             catch(Exception ex)
             {
@@ -120,5 +133,6 @@ namespace Blog.BLL
             }
             return i;
         }
+        
     }
 }

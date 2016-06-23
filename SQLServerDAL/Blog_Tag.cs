@@ -39,6 +39,22 @@ namespace Blog.SqlServerDAL
             sdr.Close(); 
             return t_Blog_Tag;
         }
+        public Blog_TagEntity SelectBlog_TagByBlogID(int t_blog_id)
+        {
+            Blog_TagEntity t_Blog_Tag = new Blog_TagEntity();
+            SqlDataReader sdr = null;
+            using (sdr = SqlDBHelp.GetReader("select * from Blog_Tags where blog_id=" + t_blog_id))
+            {
+                if (sdr.Read())
+                {
+                    t_Blog_Tag.Blog_tag_id = (int)sdr.GetValue(0);
+                    t_Blog_Tag.Tag_id = (int)sdr.GetValue(1);
+                    t_Blog_Tag.Blog_id = (int)sdr.GetValue(2);
+                }
+            }
+            sdr.Close();
+            return t_Blog_Tag;
+        }
         
         //根据主键查询整个表
         public IList<Blog_TagEntity> GetAllBlog_Tag()

@@ -50,10 +50,10 @@ namespace UI.Controllers
         {
             //if (Request.Cookies.Count > 0)
             //{
-            //    string username= Request.Cookies["username"].Value;
-            //    if (username != null) 
+            //    string username = Request.Cookies["username"].Value;
+            //    if (username != null)
             //    {
-            //        AuthorEntity entity= AuthorManager.GetAuthorByName(username);
+            //        AuthorEntity entity = AuthorManager.GetAuthorByName(username);
             //        if (entity != null)
             //        {
             //            Session["userinfo"] = entity;
@@ -61,7 +61,7 @@ namespace UI.Controllers
             //        }
             //    }
             //}
-            ////
+             
             return View();
         }
 
@@ -169,7 +169,6 @@ namespace UI.Controllers
             {
                 return View();
             }
-
             try
             {
                 AuthorEntity entity=(AuthorEntity)Session["userinfo"];
@@ -179,7 +178,6 @@ namespace UI.Controllers
                     entity.Password = newPassword;
                     Session["userinfo"] = entity;
                     AuthorManager.UpdateAuthor(entity);
-
                     return RedirectToAction("ChangePasswordSuccess");
                 }
                 else
@@ -256,9 +254,7 @@ namespace UI.Controllers
                 ModelState.AddModelError("_FORM", "The username or password provided is incorrect.");
                 return true;
             }         
-
-
-            
+        
         }
 
         private bool ValidateRegistration(string userName, string email, string password, string confirmPassword)

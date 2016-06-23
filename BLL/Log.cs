@@ -48,7 +48,7 @@ namespace Blog.BLL
             IList<LogEntity> temp=null;
             try
             {
-                temp=GetAllLog();
+                temp = dal.GetAllLog();
             }
             catch(Exception ex)
             {
@@ -64,7 +64,7 @@ namespace Blog.BLL
            IList<LogEntity> temp=null;
            try
             {
-                temp=GetAllLogByauthor_id(t_author_id);
+                temp = dal.GetAllLogByauthor_id(t_author_id);
             }
             catch(Exception ex)
             {
@@ -82,7 +82,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=InsertLog(t_Log);
+                i = dal.InsertLog(t_Log);
             }
             catch(Exception ex)
             {
@@ -97,7 +97,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=UpdateLog(t_Log);
+                i = dal.UpdateLog(t_Log);
             }
             catch(Exception ex)
             {
@@ -112,7 +112,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=DeleteLog(t_id);
+                i = dal.DeleteLog(t_id);
             }
             catch(Exception ex)
             {

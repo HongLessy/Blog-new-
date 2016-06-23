@@ -48,7 +48,7 @@ namespace Blog.BLL
             IList<RoleEntity> temp=null;
             try
             {
-                temp=GetAllRole();
+                temp = dal.GetAllRole();
             }
             catch(Exception ex)
             {
@@ -69,7 +69,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=InsertRole(t_Role);
+                i = dal.InsertRole(t_Role);
             }
             catch(Exception ex)
             {
@@ -84,7 +84,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=UpdateRole(t_Role);
+                i = dal.UpdateRole(t_Role);
             }
             catch(Exception ex)
             {
@@ -99,7 +99,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=DeleteRole(t_role_id);
+                i = dal.DeleteRole(t_role_id);
             }
             catch(Exception ex)
             {

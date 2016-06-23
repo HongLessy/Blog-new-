@@ -16,7 +16,7 @@
         <div id="upbg"></div>
         <div id="inner">
             <div id="header">
-                <h1>NN博客</h1>                
+                <h1>HonLessy博客</h1>                
             </div>
             <div id="splash"/>
             <div id="menu">
@@ -37,7 +37,7 @@
             </div>
             
             <div id="footer">
-                北风网NNBlogo系统<a href="http://www.ibeifeng.com">基于ASP.Net技术多用户博客系统</a><br />
+                小弘Blog系统<a href="http://www.ibeifeng.com">基于ASP.Net技术多用户博客系统</a><br />
             </div>
         </div>
     </div>

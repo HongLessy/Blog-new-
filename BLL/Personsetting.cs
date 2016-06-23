@@ -48,7 +48,7 @@ namespace Blog.BLL
             IList<PersonsettingEntity> temp=null;
             try
             {
-                temp=GetAllPersonsetting();
+                temp = dal.GetAllPersonsetting();
             }
             catch(Exception ex)
             {
@@ -64,7 +64,7 @@ namespace Blog.BLL
            IList<PersonsettingEntity> temp=null;
            try
             {
-                temp=GetAllPersonsettingByauthor_id(t_author_id);
+                temp = dal.GetAllPersonsettingByauthor_id(t_author_id);
             }
             catch(Exception ex)
             {
@@ -77,7 +77,7 @@ namespace Blog.BLL
            IList<PersonsettingEntity> temp=null;
            try
             {
-                temp=GetAllPersonsettingBymodel_id(t_model_id);
+                temp = dal.GetAllPersonsettingBymodel_id(t_model_id);
             }
             catch(Exception ex)
             {
@@ -95,7 +95,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=InsertPersonsetting(t_Personsetting);
+                i = dal.InsertPersonsetting(t_Personsetting);
             }
             catch(Exception ex)
             {
@@ -110,7 +110,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=UpdatePersonsetting(t_Personsetting);
+                i = dal.UpdatePersonsetting(t_Personsetting);
             }
             catch(Exception ex)
             {
@@ -125,7 +125,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=DeletePersonsetting(t_id);
+                i = dal.DeletePersonsetting(t_id);
             }
             catch(Exception ex)
             {

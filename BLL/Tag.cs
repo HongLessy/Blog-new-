@@ -48,7 +48,7 @@ namespace Blog.BLL
             IList<TagEntity> temp=null;
             try
             {
-                temp=GetAllTag();
+                temp=dal.GetAllTag();
             }
             catch(Exception ex)
             {
@@ -69,7 +69,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=InsertTag(t_Tag);
+                i=dal.InsertTag(t_Tag);
             }
             catch(Exception ex)
             {
@@ -84,7 +84,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=UpdateTag(t_Tag);
+                i=dal.UpdateTag(t_Tag);
             }
             catch(Exception ex)
             {
@@ -99,7 +99,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=DeleteTag(t_tag_id);
+                i=dal.DeleteTag(t_tag_id);
             }
             catch(Exception ex)
             {

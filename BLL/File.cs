@@ -48,7 +48,7 @@ namespace Blog.BLL
             IList<FileEntity> temp=null;
             try
             {
-                temp=GetAllFile();
+                temp = dal.GetAllFile();
             }
             catch(Exception ex)
             {
@@ -64,7 +64,7 @@ namespace Blog.BLL
            IList<FileEntity> temp=null;
            try
             {
-                temp=GetAllFileByauthor_id(t_author_id);
+                temp = dal.GetAllFileByauthor_id(t_author_id);
             }
             catch(Exception ex)
             {
@@ -82,7 +82,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=InsertFile(t_File);
+                i = dal.InsertFile(t_File);
             }
             catch(Exception ex)
             {
@@ -97,7 +97,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=UpdateFile(t_File);
+                i = dal.UpdateFile(t_File);
             }
             catch(Exception ex)
             {
@@ -112,7 +112,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=DeleteFile(t_id);
+                i = dal.DeleteFile(t_id);
             }
             catch(Exception ex)
             {

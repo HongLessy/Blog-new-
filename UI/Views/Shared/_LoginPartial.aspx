@@ -8,6 +8,6 @@
 <% } else { %>
     <ul>
         <li><%: Html.ActionLink("注册", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })%></li>
-        <li><%: Html.ActionLink("登录", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })%></li>
+        <li><%: Html.ActionLink("登录", "LogOn", "Account", routeValues: null, htmlAttributes: new { id = "logonLink" })%></li>
     </ul>
 <% } %>

@@ -287,7 +287,9 @@
     <Content Include="Views\Account\ChangePassword.aspx" />
     <Content Include="Views\Account\ChangePasswordSuccess.aspx" />
     <Content Include="Views\Account\LogOn.aspx" />
+    <Content Include="Views\Admin\AdminBlogEdit.aspx" />
     <Content Include="Views\Home\ViewPage1.aspx" />
+    <Content Include="Views\Admin\Index.aspx" />
     <Content Include="Views\Shared\HTMLPage1.htm" />
     <Content Include="Views\Shared\LogOnUserControl.ascx" />
     <Content Include="Web.config" />

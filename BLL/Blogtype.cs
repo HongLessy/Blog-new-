@@ -48,7 +48,7 @@ namespace Blog.BLL
             IList<BlogtypeEntity> temp=null;
             try
             {
-                temp=GetAllBlogtype();
+                temp = dal.GetAllBlogtype();
             }
             catch(Exception ex)
             {
@@ -64,7 +64,7 @@ namespace Blog.BLL
            IList<BlogtypeEntity> temp=null;
            try
             {
-                temp=GetAllBlogtypeByauthor_id(t_author_id);
+                temp = dal.GetAllBlogtypeByauthor_id(t_author_id);
             }
             catch(Exception ex)
             {
@@ -82,7 +82,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=InsertBlogtype(t_Blogtype);
+                i = dal.InsertBlogtype(t_Blogtype);
             }
             catch(Exception ex)
             {
@@ -97,7 +97,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=UpdateBlogtype(t_Blogtype);
+                i = dal.UpdateBlogtype(t_Blogtype);
             }
             catch(Exception ex)
             {
@@ -112,7 +112,7 @@ namespace Blog.BLL
             //定义插入数据的参数数组
             try
             {
-                i=DeleteBlogtype(t_blogtype_id);
+                i = dal.DeleteBlogtype(t_blogtype_id);
             }
             catch(Exception ex)
             {

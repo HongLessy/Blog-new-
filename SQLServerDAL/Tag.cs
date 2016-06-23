@@ -33,6 +33,7 @@ namespace Blog.SqlServerDAL
                 {
                     t_Tag.Tag_id=(int)sdr.GetValue(0);
                     t_Tag.TagName=(string)sdr.GetValue(1);
+                    t_Tag.Author_id = (int)sdr.GetValue(2);
                 }
             }
             sdr.Close(); 
@@ -50,7 +51,8 @@ namespace Blog.SqlServerDAL
                 {
                     TagEntity t_Tag= new TagEntity();
                     t_Tag.Tag_id=(int)sdr.GetValue(0);                  
-                    t_Tag.TagName=(string)sdr.GetValue(1);                  
+                    t_Tag.TagName=(string)sdr.GetValue(1);
+                    t_Tag.Author_id = (int)sdr.GetValue(2); 
                     t_Tags.Add(t_Tag);
                 }
                 sdr.Close();
@@ -69,9 +71,10 @@ namespace Blog.SqlServerDAL
           //定义插入数据的参数数组
               SqlParameter[] p=new SqlParameter[]{
               new SqlParameter("@Tag_id",t_Tag.Tag_id),
-              new SqlParameter("@TagName",t_Tag.TagName)
+              new SqlParameter("@TagName",t_Tag.TagName),
+              new SqlParameter("@Author_id",t_Tag.Author_id)
            };
-           int i=SqlDBHelp.GetExecute("insert into Tags values (@Tag_id,@TagName)", p) ;
+           int i=SqlDBHelp.GetExecute("insert into Tags values (@Tag_id,@TagName,@Author_id)", p) ;
            return i;
         }
         
@@ -79,9 +82,10 @@ namespace Blog.SqlServerDAL
         {
             SqlParameter[] p=new SqlParameter[]{
             new SqlParameter("@Tag_id",t_Tag.Tag_id),
-            new SqlParameter("@TagName",t_Tag.TagName)
+            new SqlParameter("@TagName",t_Tag.TagName),
+            new SqlParameter("@Author_id",t_Tag.Author_id)
             };
-            int i=SqlDBHelp.GetExecute("update Tags set tag_id=@Tag_id,tagName=@TagName where tag_id=@Tag_id", p) ;
+            int i=SqlDBHelp.GetExecute("update Tags set tag_id=@Tag_id,tagName=@TagName,anthor_id=@Author_id where tag_id=@Tag_id", p) ;
             return i;
         }
         
