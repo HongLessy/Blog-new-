@@ -20,6 +20,7 @@ namespace Blog.IDAL
     ///
     public interface IBlogentrie
     {
+          int GetMaxBlogID();
           BlogentrieEntity SelectBlogentrieByID(int t_blog_id);       
         //根据主键查询整个表
           IList<BlogentrieEntity> GetAllBlogentrie();      

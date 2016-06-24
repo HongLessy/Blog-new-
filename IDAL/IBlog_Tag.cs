@@ -32,7 +32,7 @@ namespace Blog.IDAL
         //删除操作
           int DeleteBlog_Tag(int t_blog_tag_id);
 
-          Blog_TagEntity SelectBlog_TagByBlogID(int t_blog_id);
+          IList<Blog_TagEntity> SelectBlog_TagByBlogID(int t_blog_id);
        
     }
 }

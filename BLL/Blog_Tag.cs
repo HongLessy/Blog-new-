@@ -41,9 +41,9 @@ namespace Blog.BLL
             }
             return temp;
         }
-        public static Blog_TagEntity SelectBlog_TagByBlogID(int t_blog_id)
+        public static IList<Blog_TagEntity> SelectBlog_TagByBlogID(int t_blog_id)
         {
-            Blog_TagEntity temp = null;
+            IList<Blog_TagEntity> temp = null;
             try
             {
                 temp = dal.SelectBlog_TagByBlogID(t_blog_id);

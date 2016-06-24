@@ -190,5 +190,10 @@ namespace Blog.AccessDAL
             int i=OLEDBHelp.GetExecute("delete from Blogentries where blog_id="+t_blog_id);
 			return i;
         }
+
+        public int GetMaxBlogID()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

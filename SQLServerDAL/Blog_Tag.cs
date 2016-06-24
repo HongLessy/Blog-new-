@@ -39,21 +39,23 @@ namespace Blog.SqlServerDAL
             sdr.Close(); 
             return t_Blog_Tag;
         }
-        public Blog_TagEntity SelectBlog_TagByBlogID(int t_blog_id)
-        {
-            Blog_TagEntity t_Blog_Tag = new Blog_TagEntity();
+        
+        public IList<Blog_TagEntity> SelectBlog_TagByBlogID(int t_blog_id)
+        {IList<Blog_TagEntity> t_Blog_Tags = new List<Blog_TagEntity>();
             SqlDataReader sdr = null;
             using (sdr = SqlDBHelp.GetReader("select * from Blog_Tags where blog_id=" + t_blog_id))
             {
-                if (sdr.Read())
+                while(sdr.Read())
                 {
-                    t_Blog_Tag.Blog_tag_id = (int)sdr.GetValue(0);
-                    t_Blog_Tag.Tag_id = (int)sdr.GetValue(1);
-                    t_Blog_Tag.Blog_id = (int)sdr.GetValue(2);
+                    Blog_TagEntity t_Blog_Tag= new Blog_TagEntity();
+                    t_Blog_Tag.Blog_tag_id=(int)sdr.GetValue(0);                  
+                    t_Blog_Tag.Tag_id=(int)sdr.GetValue(1);                  
+                    t_Blog_Tag.Blog_id=(int)sdr.GetValue(2);                  
+                    t_Blog_Tags.Add(t_Blog_Tag);
                 }
+                sdr.Close();
             }
-            sdr.Close();
-            return t_Blog_Tag;
+            return t_Blog_Tags;
         }
         
         //根据主键查询整个表
@@ -104,11 +106,11 @@ namespace Blog.SqlServerDAL
         {
           //定义插入数据的参数数组
               SqlParameter[] p=new SqlParameter[]{
-              new SqlParameter("@Blog_tag_id",t_Blog_Tag.Blog_tag_id),
+              
               new SqlParameter("@Tag_id",t_Blog_Tag.Tag_id),
               new SqlParameter("@Blog_id",t_Blog_Tag.Blog_id)
            };
-           int i=SqlDBHelp.GetExecute("insert into Blog_Tags values (@Blog_tag_id,@Tag_id,@Blog_id)", p) ;
+              int i = SqlDBHelp.GetExecute("insert into Blog_Tags(Tag_id,Blog_id) values (@Tag_id,@Blog_id)", p);
            return i;
         }
         

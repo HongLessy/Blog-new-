@@ -22,7 +22,11 @@ namespace Blog.SqlServerDAL
     ///
     public class Blogentrie:IBlogentrie
     {
-    
+        public int GetMaxBlogID()
+        {
+            string s = SqlDBHelp.GetSingle("select max(blog_id) from Blogentries");
+            return int.Parse(s);
+        }
         public  BlogentrieEntity SelectBlogentrieByID(int t_blog_id)
         {
             BlogentrieEntity t_Blogentrie= new BlogentrieEntity();
@@ -146,7 +150,7 @@ namespace Blog.SqlServerDAL
         {
           //定义插入数据的参数数组
               SqlParameter[] p=new SqlParameter[]{
-              new SqlParameter("@Blog_id",t_Blogentrie.Blog_id),
+              
               new SqlParameter("@Author_id",t_Blogentrie.Author_id),
               new SqlParameter("@Title",t_Blogentrie.Title),
               new SqlParameter("@Description",t_Blogentrie.Description),
@@ -160,7 +164,7 @@ namespace Blog.SqlServerDAL
               new SqlParameter("@Islock",t_Blogentrie.Islock),
               new SqlParameter("@Blogtype_id",t_Blogentrie.Blogtype_id)
            };
-           int i=SqlDBHelp.GetExecute("insert into Blogentries values (@Blog_id,@Author_id,@Title,@Description,@Type,@Allowcomment,@Markprivate,@Body,@Datecreated,@Datepublished,@Datemodified,@Islock,@Blogtype_id)", p) ;
+              int i = SqlDBHelp.GetExecute("insert into Blogentries(Author_id,Title,Description,Type,Allowcomment,Markprivate,Body,Datecreated,Datepublished,Datemodified,Islock,Blogtype_id) values (@Author_id,@Title,@Description,@Type,@Allowcomment,@Markprivate,@Body,@Datecreated,@Datepublished,@Datemodified,@Islock,@Blogtype_id)", p);
            return i;
         }
         

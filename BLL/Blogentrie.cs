@@ -133,5 +133,19 @@ namespace Blog.BLL
             }
             return i;
         }
+        public static int GetMaxBlogID()
+        {
+            int i = -1;
+            //定义插入数据的参数数组
+            try
+            {
+                i = dal.GetMaxBlogID();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return i;
+        }
     }
 }

@@ -128,5 +128,11 @@ namespace Blog.AccessDAL
             int i=OLEDBHelp.GetExecute("delete from Blog_Tags where blog_tag_id="+t_blog_tag_id);
 			return i;
         }
+
+
+        IList<Blog_TagEntity> IBlog_Tag.SelectBlog_TagByBlogID(int t_blog_id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

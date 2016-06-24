@@ -86,6 +86,58 @@ namespace UI.Controllers
 
             return RedirectToAction("index", new { page = "1" });
         }
+        public ActionResult AdminBlogCreate()
+        {
+            AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+           
+            var model = TagManager.GetAllTag().ToList().Select(p => p).Where(p => p.Author_id == entity.Author_id).ToList();
 
+            ViewData["tag"] = model;
+            List<int> name = new List<int>();
+            name.Add(entity.Author_id);
+            ViewData["username"] = new SelectList(name);
+            return View();
+        }
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult AdminBlogCreate(FormCollection form)
+        {
+            AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+            BlogentrieEntity blog = new BlogentrieEntity();
+            blog.Author_id = entity.Author_id;
+            blog.Title = form["title"].ToString();
+            string[] selectedTags = form["TagCheckBox"].Split(new char[] { ',' });
+
+            List<TagEntity> tags = TagManager.GetAllTag().Select(p => p).Where(p => p.Author_id == entity.Author_id).ToList();
+
+            
+
+            blog.Description = form["description"];
+            blog.Type = form["type"];
+            blog.Allowcomment = form["CommentCheckBox"].Contains("true") ? "y" : "n";
+            blog.Markprivate = form["PrivateCheckBox"].Contains("true") ? "y" : "n";
+            blog.Body = form["body"];
+            blog.Datecreated = DateTime.Now;
+            blog.Datemodified = DateTime.Now;
+            blog.Datepublished = DateTime.Now;
+            blog.Islock = "n";
+            blog.Blogtype_id = 1;
+            BlogentrieManager.InsertBlogentrie(blog);
+            int maxBlogID = BlogentrieManager.GetMaxBlogID();
+            for (int i = 0; i < selectedTags.Length; i++)
+            {
+                
+                    
+                    Blog_TagEntity bte = new Blog_TagEntity();
+                    bte.Blog_id = maxBlogID;
+                    bte.Tag_id = int.Parse(selectedTags[i]);
+                    Blog_TagManager.InsertBlog_Tag(bte);
+                
+            }
+
+            
+
+
+            return RedirectToAction("index", new { page = "1" });
+        }
     }
 }

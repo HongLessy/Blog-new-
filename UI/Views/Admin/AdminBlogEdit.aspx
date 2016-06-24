@@ -33,12 +33,13 @@
             <p>
                 <label for="title">分类：</label>
                <% 
-                    Blog_TagEntity blogtagentity = Blog_TagManager.SelectBlog_TagByBlogID(Model.Blog_id);
+                    List<Blog_TagEntity> blogtagentitys = Blog_TagManager.SelectBlog_TagByBlogID(Model.Blog_id).ToList();
+                    List<int> blogtagentity= blogtagentitys.Select(p => p.Tag_id).ToList();
            
                 %>
                 <% foreach (var tag in (List<TagEntity>)ViewData["tag"] ) { %>
                   
-                  <% if (blogtagentity.Tag_id==tag.Tag_id)
+                  <% if (blogtagentity.Contains(tag.Tag_id))
                      {      %>  
                    <%  =Html.CheckBox("TagCheckBox",true, new {  id=tag.TagName }) %>                  
                   <label for="<% =tag.TagName %>" ><% =tag.TagName %></label>
