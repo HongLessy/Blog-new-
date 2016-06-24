@@ -6,6 +6,9 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Blog.BLL;
+using Blog.Model;
+using UI.Controllers;
 
 namespace UI
 {
@@ -23,6 +26,57 @@ namespace UI
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+        }
+        protected void Application_Error(object sender,EventArgs e)
+        {
+            AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+
+            LogEntity logentity = new LogEntity();
+            if(entity==null)
+            {
+                logentity.Author_id=1;
+            }
+            else
+            {
+                logentity.Author_id=entity.Author_id;
+            }
+            logentity.Date = DateTime.Now;
+            logentity.Opevent = Server.GetLastError().ToString();
+            LogManager.InsertLog(logentity);
+
+
+            Exception exception = Server.GetLastError();
+            Response.Clear();
+
+            HttpException httpException = exception as HttpException;
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("controller", "Error");
+
+            if(httpException==null)
+            {
+                routeData.Values.Add("action", "Index");
+            }
+            else
+            {
+                if(httpException.GetHttpCode()==404)
+                {
+                    routeData.Values.Add("action", "HttpErrorFor404");
+                }
+                else if(httpException.GetHttpCode()==500)
+                {
+                    routeData.Values.Add("action", "HttpErrorFor500");
+                }
+                else
+                {
+                    routeData.Values.Add("action", "Commom");
+                }
+            }
+            routeData.Values.Add("error", exception);
+            Server.ClearError();
+
+
+            IController errorController = new ErrorController();
+            errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
         }
     }
 }

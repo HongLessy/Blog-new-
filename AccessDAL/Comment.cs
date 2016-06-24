@@ -137,5 +137,11 @@ namespace Blog.AccessDAL
             int i=OLEDBHelp.GetExecute("delete from Comments where comment_id="+t_comment_id);
 			return i;
         }
+
+
+        public IList<CommentEntity> GetAllCommentByAuthor_id(int t_author_id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

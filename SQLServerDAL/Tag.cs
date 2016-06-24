@@ -70,22 +70,21 @@ namespace Blog.SqlServerDAL
         {
           //定义插入数据的参数数组
               SqlParameter[] p=new SqlParameter[]{
-              new SqlParameter("@Tag_id",t_Tag.Tag_id),
+              
               new SqlParameter("@TagName",t_Tag.TagName),
               new SqlParameter("@Author_id",t_Tag.Author_id)
            };
-           int i=SqlDBHelp.GetExecute("insert into Tags values (@Tag_id,@TagName,@Author_id)", p) ;
+              int i = SqlDBHelp.GetExecute("insert into Tags(tagName,author_id) values (@TagName,@Author_id)", p);
            return i;
         }
         
         public  int UpdateTag(TagEntity t_Tag)
         {
-            SqlParameter[] p=new SqlParameter[]{
+            SqlParameter[] p=new SqlParameter[]{     
             new SqlParameter("@Tag_id",t_Tag.Tag_id),
-            new SqlParameter("@TagName",t_Tag.TagName),
-            new SqlParameter("@Author_id",t_Tag.Author_id)
+            new SqlParameter("@TagName",t_Tag.TagName)     
             };
-            int i=SqlDBHelp.GetExecute("update Tags set tag_id=@Tag_id,tagName=@TagName,anthor_id=@Author_id where tag_id=@Tag_id", p) ;
+            int i=SqlDBHelp.GetExecute("update Tags set tagName=@TagName where tag_id=@Tag_id", p) ;
             return i;
         }
         

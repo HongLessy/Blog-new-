@@ -19,10 +19,11 @@
                 <h1>HonLessy博客</h1>                
             </div>
             <div id="splash"/>
+        </div>
             <div id="menu">
                 <%= Html.Menu()%>
             </div>
-            
+            <div>
             <div id="primarycontent">
                 <!--左数据主体部分开始 -->
                 <asp:ContentPlaceHolder ID="ContentPlaceHolderPrimary" runat="server">
@@ -35,11 +36,10 @@
                 </asp:ContentPlaceHolder>
                 <!--右列表部分结束 -->
             </div>
-            
+          </div>
             <div id="footer">
                 小弘Blog系统<a href="http://www.ibeifeng.com">基于ASP.Net技术多用户博客系统</a><br />
             </div>
         </div>
-    </div>
 </body>
 </html>

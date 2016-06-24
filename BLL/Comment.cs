@@ -72,6 +72,19 @@ namespace Blog.BLL
             }
             return temp;
         }
+        public static IList<CommentEntity> GetAllCommentByAuthor_id(int t_author_id)
+        {
+            IList<CommentEntity> temp = null;
+            try
+            {
+                temp = dal.GetAllCommentByAuthor_id(t_author_id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return temp;
+        }
         
 
         

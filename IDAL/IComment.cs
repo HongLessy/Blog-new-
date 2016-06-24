@@ -25,6 +25,7 @@ namespace Blog.IDAL
           IList<CommentEntity> GetAllComment();      
         //根据外键进行查询
           IList<CommentEntity> GetAllCommentByblog_id(int t_blog_id);
+          IList<CommentEntity> GetAllCommentByAuthor_id(int t_author_id);
         //插入操作
           int InsertComment(CommentEntity t_Comment);       
         //修改操作

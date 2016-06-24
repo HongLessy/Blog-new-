@@ -95,8 +95,31 @@ namespace Blog.SqlServerDAL
             }
             return t_Comments;
         }
-        
+        public IList<CommentEntity> GetAllCommentByAuthor_id(int t_author_id)
+        {
+            IList<CommentEntity> t_Comments = new List<CommentEntity>();
+            SqlDataReader sdr = null;
+            using (sdr = SqlDBHelp.GetReader("select * from Comments where blog_id in(select blog_id from Blogentries where author_id=" + t_author_id + ")"))
+            {
+                while (sdr.Read())
+                {
+                    CommentEntity t_Comment = new CommentEntity();
+                    t_Comment.Comment_id = (int)sdr.GetValue(0);
+                    t_Comment.Author = (string)sdr.GetValue(1);
+                    t_Comment.Blog_id = (int)sdr.GetValue(2);
+                    t_Comment.Ip = (string)sdr.GetValue(3);
+                    t_Comment.Datecreated = (DateTime)sdr.GetValue(4);
+                    t_Comment.Datemodified = (DateTime)sdr.GetValue(5);
+                    t_Comment.Body = (string)sdr.GetValue(6);
+                    t_Comment.Islock = (string)sdr.GetValue(7);
+                    t_Comments.Add(t_Comment);
+                }
+                sdr.Close();
+            }
+            return t_Comments;
+        }
 
+  
         
         //插入操作
         public  int InsertComment(CommentEntity t_Comment)
@@ -128,7 +151,7 @@ namespace Blog.SqlServerDAL
             new SqlParameter("@Body",t_Comment.Body),
             new SqlParameter("@Islock",t_Comment.Islock)
             };
-            int i=SqlDBHelp.GetExecute("update Comments set comment_id=@Comment_id,author=@Author,ip=@Ip,datecreated=@Datecreated,datemodified=@Datemodified,body=@Body,islock=@Islock where comment_id=@Comment_id", p) ;
+            int i=SqlDBHelp.GetExecute("update Comments set author=@Author,ip=@Ip,datecreated=@Datecreated,datemodified=@Datemodified,body=@Body,islock=@Islock where comment_id=@Comment_id", p) ;
             return i;
         }
         

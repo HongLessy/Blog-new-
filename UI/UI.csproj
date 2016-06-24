@@ -185,6 +185,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -289,6 +290,15 @@
     <Content Include="Views\Account\LogOn.aspx" />
     <Content Include="Views\Admin\AdminBlogCreate.aspx" />
     <Content Include="Views\Admin\AdminBlogEdit.aspx" />
+    <Content Include="Views\Admin\AdminComments.aspx" />
+    <Content Include="Views\Admin\AdminCommentEdit.aspx" />
+    <Content Include="Views\Admin\AdminLog.aspx" />
+    <Content Include="Views\Admin\AdminSetupEdit.aspx" />
+    <Content Include="Views\Admin\AdminLogShow.aspx" />
+    <Content Include="Views\Admin\AdminTagCreate.aspx" />
+    <Content Include="Views\Admin\AdminTagEdit.aspx" />
+    <Content Include="Views\Admin\AdminTags.aspx" />
+    <Content Include="Views\Error\Index.aspx" />
     <Content Include="Views\Home\ViewPage1.aspx" />
     <Content Include="Views\Admin\Index.aspx" />
     <Content Include="Views\Shared\HTMLPage1.htm" />
@@ -317,7 +327,7 @@
     <Content Include="Images\orderedList9.png" />
     <Content Include="Views\Account\Register.aspx" />
     <Content Include="Views\Home\Index.aspx" />
-    <Content Include="Views\Shared\Error.aspx" />
+    <Content Include="Views\Shared\Error1.aspx" />
     <Content Include="Views\Shared\_LoginPartial.aspx" />
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Web.config" />

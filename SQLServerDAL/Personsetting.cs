@@ -151,7 +151,7 @@ namespace Blog.SqlServerDAL
             new SqlParameter("@Rss_size",t_Personsetting.Rss_size),
             new SqlParameter("@Max_uploadfile",t_Personsetting.Max_uploadfile)
             };
-            int i=SqlDBHelp.GetExecute("update Personsettings set id=@Id,blog_title=@Blog_title,description=@Description,blog_path=@Blog_path,rss_size=@Rss_size,max_uploadfile=@Max_uploadfile where id=@Id", p) ;
+            int i=SqlDBHelp.GetExecute("update Personsettings set blog_title=@Blog_title,description=@Description,blog_path=@Blog_path,rss_size=@Rss_size,max_uploadfile=@Max_uploadfile where id=@Id", p) ;
             return i;
         }
         

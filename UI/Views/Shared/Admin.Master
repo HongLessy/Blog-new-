@@ -17,7 +17,7 @@
     <div class="content">
         <ul class="linklist">
             <li><%= Html.ActionLink("管理随笔、文章","index")%></li>
-            <li><%= Html.ActionLink("管理评论","AdminCommets")%></li>
+            <li><%= Html.ActionLink("管理评论","AdminComments")%></li>
             <li><%= Html.ActionLink("管理分类","AdminTags")%></li>
             <li><%= Html.ActionLink("管理用户","AdminAuthors")%></li>
             <li><%= Html.ActionLink("管理文件","AdminFiles")%></li>

@@ -68,7 +68,7 @@ namespace Blog.SqlServerDAL
         {
            IList<LogEntity> t_Logs = new List<LogEntity>();
            SqlDataReader sdr = null;
-           using(sdr=SqlDBHelp.GetReader("select * from Logs where author_id="+t_author_id))
+           using(sdr=SqlDBHelp.GetReader("select * from Logs where author_id="+t_author_id+" order by Date desc"))
            {
               while(sdr.Read())
                 {
@@ -90,13 +90,12 @@ namespace Blog.SqlServerDAL
         public  int InsertLog(LogEntity t_Log)
         {
           //定义插入数据的参数数组
-              SqlParameter[] p=new SqlParameter[]{
-              new SqlParameter("@Id",t_Log.Id),
+              SqlParameter[] p=new SqlParameter[]{             
               new SqlParameter("@Author_id",t_Log.Author_id),
               new SqlParameter("@Date",t_Log.Date),
               new SqlParameter("@Opevent",t_Log.Opevent)
            };
-           int i=SqlDBHelp.GetExecute("insert into Logs values (@Id,@Author_id,@Date,@Opevent)", p) ;
+              int i = SqlDBHelp.GetExecute("insert into Logs(Author_id,Date,Opevent) values (@Author_id,@Date,@Opevent)", p);
            return i;
         }
         

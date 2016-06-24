@@ -139,5 +139,179 @@ namespace UI.Controllers
 
             return RedirectToAction("index", new { page = "1" });
         }
+        public ActionResult AdminBlogDelete(int id)
+        {
+            int i=BlogentrieManager.DeleteBlogentrie(id);
+            return RedirectToAction("index", new { page = "1" });
+        }
+        public ActionResult AdminTags(string sort, int? page)
+        {
+            AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+            if (Session["userinfo"] == null)
+            {
+                return RedirectToAction("LogOn", "Account");
+            }
+            else
+            {
+                page = page ?? 0;
+                if (page >= 1) page = page - 1;
+              
+                List<TagEntity> tags = TagManager.GetAllTag().Select(p => p).Where(p => p.Author_id == entity.Author_id).ToList();
+                var model= tags.ToList().AsQueryable().ToPagedList(page, 5, "Tag_id", sort);
+                return View(model);
+
+            }
+            
+
+        }
+        [AcceptVerbs(HttpVerbs.Get)]
+        public ActionResult AdminTagEdit(int id)
+        {
+            AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+            TagEntity tagEntity =TagManager.SelectTagByID(id);
+           
+            return View(tagEntity);
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult AdminTagEdit(int id, FormCollection form)
+        {
+            TagEntity tagEntity = TagManager.SelectTagByID(id);
+            tagEntity.TagName = form["tagname"];
+            TagManager.UpdateTag(tagEntity);
+
+            return RedirectToAction("AdminTags", new { page = "1" });
+        }
+        public ActionResult AdminTagDelete(int id)
+        {
+            int i = TagManager.DeleteTag(id);
+            return RedirectToAction("AdminTags", new { page = "1" });
+        }
+        public ActionResult AdminTagCreate()
+        {
+            
+            return View();
+        }
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult AdminTagCreate(FormCollection form)
+        {
+
+            if (Session["userinfo"] == null)
+            {
+                return RedirectToAction("LogOn", "Account");
+            }
+            else
+            {
+                TagEntity tagEntity = new TagEntity();
+                AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+                tagEntity.Author_id = entity.Author_id;
+                tagEntity.TagName = form["tagname"];
+
+                TagManager.InsertTag(tagEntity);
+
+                return RedirectToAction("AdminTags", new { page = "1" });
+            }
+
+            
+        }
+        public ActionResult AdminSetupEdit()
+        {
+            if (Session["userinfo"] == null)
+            {
+                return RedirectToAction("LogOn", "Account");
+            }
+            else
+            {
+                AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+                PersonsettingEntity model = PersonsettingManager.GetAllPersonsettingByauthor_id(entity.Author_id).First();
+                return View(model);
+            }
+            
+        }
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult AdminSetupEdit(FormCollection form)
+        {
+            if (Session["userinfo"] == null)
+            {
+                return RedirectToAction("LogOn", "Account");
+            }
+            else
+            {
+                AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+                PersonsettingEntity model = PersonsettingManager.GetAllPersonsettingByauthor_id(entity.Author_id).First();
+
+                model.Blog_path = form["blog_path"];
+                model.Blog_title = form["blog_title"];
+                model.Description = form["description"];
+                model.Rss_size = int.Parse(form["rss_size"]);
+                model.Max_uploadfile = int.Parse(form["max_uploadfile"]);
+                PersonsettingManager.UpdatePersonsetting(model);
+
+                return RedirectToAction("index", new { page = "1" });
+            }
+        }
+        public ActionResult AdminComments(string sort,int? page)
+        {
+            if (Session["userinfo"] == null)
+            {
+                return RedirectToAction("LogOn", "Account");
+            }
+            else
+            {
+                AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+                IList<CommentEntity> comments = CommentManager.GetAllCommentByAuthor_id(entity.Author_id);
+                var model = comments.ToList().AsQueryable().ToPagedList(page, 5, "Comment_id", sort);
+                return View(model);
+            }
+        }
+        public ActionResult AdminCommentEdit(int id)
+        {
+            CommentEntity comment= CommentManager.SelectCommentByID(id);
+            return View(comment);
+        }
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult AdminCommentEdit(int id,FormCollection form)
+        {
+            CommentEntity comment = CommentManager.SelectCommentByID(id);
+            comment.Datecreated = DateTime.Now;
+            //comment.Ip =Request
+            comment.Body = form["body"];
+            comment.Author = form["author"];
+
+            CommentManager.UpdateComment(comment);
+            return RedirectToAction("AdminComments");
+
+        }
+        public ActionResult AdminCommentDelete(int id)
+        {
+            int i = CommentManager.DeleteComment(id);
+            return RedirectToAction("AdminComments");
+        }
+        public ActionResult AdminLog(string sort,int? page)
+        {
+            if (Session["userinfo"] == null)
+            {
+                return RedirectToAction("LogOn", "Account");
+            }
+            else
+            {
+                AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+                IList<LogEntity> logs = LogManager.GetAllLogByauthor_id(entity.Author_id).ToList();
+                var model = logs.ToList().AsQueryable().ToPagedList(page, 5, "Id", sort);
+                return View(model);
+            }
+
+        }
+        public ActionResult AdminLogDelete(int id)
+        {
+            int i = LogManager.DeleteLog(id);
+            return RedirectToAction("AdminLog");
+        }
+
+        public ActionResult AdminLogShow(int id)
+        {
+            LogEntity log = LogManager.SelectLogByID(id);
+            return View(log);
+        }
     }
 }
