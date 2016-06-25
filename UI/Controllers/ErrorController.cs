@@ -15,25 +15,25 @@ namespace UI.Controllers
         [OutputCache(Location=OutputCacheLocation.None)]
         public ActionResult Index(string errorInfo)
         {
-            ViewData["Title"] = "0.0出错了->程序员用意念摧毁了你的电脑00.00";
+            ViewData["Title"] = "0.0出错了->可能是程序员用意念摧毁了你的电脑";
             ViewData["Desctiption"] = errorInfo;
             return View();
         }
         public ActionResult HttpErrorFor404(string errorInfo)
         {
-            ViewData["Title"] = "0.0出错了->页面被程序员删除了！00.00（404） ";
+            ViewData["Title"] = "0.0出错了->（404）页面被程序员当夜宵吃掉了！！ ";
             ViewData["Desctiption"] = errorInfo;
             return View("Index");
         }
         public ActionResult HttpErrorFor500(string errorInfo)
         {
-            ViewData["Title"] = "0.0出错了->服务器被程序员不小心关掉了！00.00（500） ";
+            ViewData["Title"] = "0.0出错了->（500）服务器被程序员不小心关掉了！！ ";
             ViewData["Desctiption"] = errorInfo;
             return View("Index");
         }
         public ActionResult Commom(string errorInfo)
         {
-            ViewData["Title"] = "未知错误！都怪程序员！瞎编代码 ";
+            ViewData["Title"] = "未知错误！都怪程序员！瞎编代码！！扣一个月工资！ ";
             ViewData["Desctiption"] = errorInfo;
             return View("Index");
         }

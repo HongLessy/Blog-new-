@@ -8,6 +8,9 @@
         <li>
             <a href="../Account/Register">×¢²á</a>
         </li>
+        <li>
+            <a href="../Blog/Index?page=1&authorID=3">²âÊÔ²©¿Í</a>
+        </li>
     </ul>
 
 </asp:Content>
