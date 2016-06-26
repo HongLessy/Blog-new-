@@ -7,11 +7,7 @@
     </asp:ContentPlaceHolder>
 </asp:Content>
 
-<asp:Content ID="ContentPrimary" ContentPlaceHolderID="ContentPlaceHolderPrimary" runat="server">
-    <asp:ContentPlaceHolder ID="ContentPlaceHolderPage" runat="server">
-    
-    </asp:ContentPlaceHolder>
-</asp:Content>
+
 
 <asp:Content ID="ContentSecondary" ContentPlaceHolderID="ContentPlaceHolderSecondary" runat="server">
     <div class="Lable">分类</div>
@@ -55,4 +51,9 @@
              <li><a href="/Blog/RSSComments">评论</a></li>
         </ul>
     </div>
+</asp:Content>
+<asp:Content ID="ContentPrimary" ContentPlaceHolderID="ContentPlaceHolderPrimary" runat="server">
+    <asp:ContentPlaceHolder ID="ContentPlaceHolderPage" runat="server">
+    
+    </asp:ContentPlaceHolder>
 </asp:Content>

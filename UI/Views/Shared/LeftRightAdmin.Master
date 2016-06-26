@@ -2,18 +2,14 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <asp:ContentPlaceHolder ID="head" runat="server">
-        <title>11111</title>
+        <title>2222222</title>
     </asp:ContentPlaceHolder>
 </asp:Content>
 
-<asp:Content ID="ContentPrimary" ContentPlaceHolderID="ContentPlaceHolderPrimary" runat="server">
-    <asp:ContentPlaceHolder ID="ContentPlaceHolderPage" runat="server">
-        
-    </asp:ContentPlaceHolder>
-</asp:Content>
+
 
 <asp:Content ID="ContentSecondary" ContentPlaceHolderID="ContentPlaceHolderSecondary" runat="server">
-    <h3>管理面板1111</h3>
+    <h3>管理面板22222</h3>
     <div class="content">
         <ul class="linklist">
             <li><%= Html.ActionLink("管理随笔、文章","index")%></li>
@@ -28,3 +24,8 @@
         <% Html.RenderPartial("LogOnUserControl");%>
     </div>
 </asp:Content>
+<asp:Content ID="ContentPrimary" ContentPlaceHolderID="ContentPlaceHolderPrimary" runat="server">
+    <asp:ContentPlaceHolder ID="ContentPlaceHolderPage" runat="server">
+        
+    </asp:ContentPlaceHolder>
+</asp:Content>  

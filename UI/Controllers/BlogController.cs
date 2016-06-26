@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Blog.Model;
 using Blog.BLL;
+using System.Xml;
+using System.Text;
 
 namespace UI.Controllers
 {
@@ -24,8 +26,7 @@ namespace UI.Controllers
 
             ViewData["page"] = page;
             int n = (page - 1) * pageSize;
-            var model = (from blogentry in blogEntries orderby blogentry.Datecreated descending select blogentry).Skip((page - 1) * pageSize);
-
+            var model = (from blogentry in blogEntries orderby blogentry.Datecreated descending select blogentry).Skip(n).Take(pageSize).ToList();
             ApplicationSetting();
 
             return View(model);
@@ -73,6 +74,198 @@ namespace UI.Controllers
 
             ApplicationSetting();
             return View(model);
+        }
+        public ActionResult BlogArticles(int page)
+        {
+            int authorID = (int)Session["visitor"];
+            var blogs = BlogentrieManager.GetAllBlogentrieByauthor_id(authorID);
+            var articles = blogs.Select(p => p).Where(p => p.Type == "文章").Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewData["page"] = page;
+            ApplicationSetting();
+            return View(articles);
+            
+        }
+        public ActionResult BlogByMonth(int year,int month,int page)
+        {
+            int authorID = (int)Session["visitor"];
+            var blogEntries = BlogentrieManager.GetAllBlogentrieByauthor_id(authorID);
+            int count = blogEntries.Count;
+            if (page <= 0) page = 1;
+            if (page * pageSize > count) page = page - 1;
+
+            ViewData["page"] = page;
+            ViewData["Year"] = year;
+            ViewData["Month"] = month;
+
+
+            var model = blogEntries.Select(p => p).Where(p => (p.Datecreated.Year == year) && (p.Datecreated.Month == month)).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ApplicationSetting();
+
+            return View(model);
+        }
+        public ActionResult RSSBlogs()
+        {
+
+            int authorID = (int)Session["visitor"];
+            Response.Clear();
+
+            Response.ContentType = "text/xml";
+            XmlTextWriter xtw = new XmlTextWriter(Response.OutputStream, Encoding.UTF8);
+
+            xtw.WriteStartDocument();
+
+            xtw.WriteStartElement("rss");
+            xtw.WriteAttributeString("version", "2.0");
+
+            xtw.WriteStartElement("channel");
+            PersonsettingEntity entity = PersonsettingManager.GetAllPersonsettingByauthor_id(authorID).First();
+            xtw.WriteAttributeString("title", entity.Blog_path + ":::::Entry Feed:::::");
+            xtw.WriteAttributeString("link", entity.Blog_path + "/Blog/Index?id=" + authorID + "&page=1");
+            xtw.WriteAttributeString("description", "来自" + entity.Blog_path + "的博客");
+            xtw.WriteAttributeString("copyright", "it belongs to www.HonLessy.vicp.io");
+
+            var Blogs = BlogentrieManager.GetAllBlogentrieByauthor_id(authorID);
+            var entries = Blogs.Select(p => p).Where(p => p.Type == "随笔").ToList();
+
+            foreach (var entry in entries)
+            {
+                xtw.WriteStartElement("item");
+                xtw.WriteAttributeString("title", entry.Title);
+                xtw.WriteAttributeString("description", entry.Description);
+                xtw.WriteAttributeString("link", entity.Blog_path + "/BlogEntry.aspx?page=" + entry.Blog_id);
+                xtw.WriteAttributeString("publishDate", entry.Datepublished.ToString());
+
+                xtw.WriteEndElement();
+            }
+
+            xtw.WriteEndElement();
+            xtw.WriteEndElement();
+            xtw.WriteEndDocument();
+
+            xtw.Flush();
+            xtw.Close();
+            Response.End();
+
+            return View();
+        }
+        public ActionResult RSSArticles()
+        {
+
+            int authorID = (int)Session["visitor"];
+            Response.Clear();
+
+            Response.ContentType = "text/xml";
+            XmlTextWriter xtw = new XmlTextWriter(Response.OutputStream, Encoding.UTF8);
+
+            xtw.WriteStartDocument();
+
+            xtw.WriteStartElement("rss");
+            xtw.WriteAttributeString("version", "2.0");
+
+            xtw.WriteStartElement("channel");
+            PersonsettingEntity entity = PersonsettingManager.GetAllPersonsettingByauthor_id(authorID).First();
+            xtw.WriteAttributeString("title", entity.Blog_path + ":::::Articles Feed:::::");
+            xtw.WriteAttributeString("link", entity.Blog_path + "Blog/Index?id=" + authorID + "&page=1");
+            xtw.WriteAttributeString("description", "来自" + entity.Blog_path + "的博客");
+            xtw.WriteAttributeString("copyright", "it belongs to www.HonLessy.vicp.io");
+
+            var Blogs = BlogentrieManager.GetAllBlogentrieByauthor_id(authorID);
+            var entries = Blogs.Select(p => p).Where(p => p.Type == "文章").ToList();
+
+            foreach (var entry in entries)
+            {
+                xtw.WriteStartElement("item");
+                xtw.WriteAttributeString("title", entry.Title);
+                xtw.WriteAttributeString("description", entry.Description);
+                xtw.WriteAttributeString("link", entity.Blog_path + "BlogEntry.aspx?page=" + entry.Blog_id);
+                xtw.WriteAttributeString("publishDate", entry.Datepublished.ToString());
+
+                xtw.WriteEndElement();
+            }
+
+            xtw.WriteEndElement();
+            xtw.WriteEndElement();
+            xtw.WriteEndDocument();
+
+            xtw.Flush();
+            xtw.Close();
+            Response.End();
+
+            return View();
+        }
+        public ActionResult RSSComments()
+        {
+
+            int authorID = (int)Session["visitor"];
+            Response.Clear();
+
+            Response.ContentType = "text/xml";
+            XmlTextWriter xtw = new XmlTextWriter(Response.OutputStream, Encoding.UTF8);
+
+            xtw.WriteStartDocument();
+
+            xtw.WriteStartElement("rss");
+            xtw.WriteAttributeString("version", "2.0");
+
+            xtw.WriteStartElement("channel");
+            PersonsettingEntity entity = PersonsettingManager.GetAllPersonsettingByauthor_id(authorID).First();
+            xtw.WriteAttributeString("title", entity.Blog_path + ":::::Articles Feed:::::");
+            xtw.WriteAttributeString("link", entity.Blog_path + "Blog/Index?id=" + authorID + "&page=1");
+            xtw.WriteAttributeString("description", "来自" + entity.Blog_path + "的博客");
+            xtw.WriteAttributeString("copyright", "it belongs to www.HonLessy.vicp.io");
+
+            var blogs = BlogentrieManager.GetAllBlogentrieByauthor_id(authorID).ToList();
+            var blogIDs = blogs.Select(p => p.Blog_id).ToList();
+            var comments = CommentManager.GetAllComment().Select(p=>p).Where(p=>blogIDs.Contains(p.Blog_id));
+
+
+            foreach (var comment in comments)
+            {
+                xtw.WriteStartElement("item");
+                xtw.WriteAttributeString("title", comment.Author);
+                xtw.WriteAttributeString("description", "from" +comment.Author);
+                xtw.WriteAttributeString("link", entity.Blog_path + "BlogEntry.aspx?page=" + comment.Blog_id);
+                xtw.WriteAttributeString("publishDate", comment.Datecreated.ToString());
+
+                xtw.WriteEndElement();
+            }
+
+            xtw.WriteEndElement();
+            xtw.WriteEndElement();
+            xtw.WriteEndDocument();
+
+            xtw.Flush();
+            xtw.Close();
+            Response.End();
+
+            return View();
+        }
+        public ActionResult BlogEntry(int page)
+        {
+            BlogentrieEntity be = BlogentrieManager.SelectBlogentrieByID(page);
+
+            ApplicationSetting();
+            return View(be);
+        }
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult AddComment(int id,string commentAuthor,string commentText)
+        { 
+            CommentEntity ce = new CommentEntity();
+            ce.Blog_id = id;
+            ce.Body = commentText;
+            ce.Author = commentAuthor;
+            ce.Datecreated = DateTime.Now;
+            ce.Datemodified = DateTime.Now;
+            ce.Islock = "n";
+            ce.Ip = "137.45.0.0";
+            CommentManager.InsertComment(ce); 
+
+
+
+            ApplicationSetting();
+            return RedirectToAction("BlogEntry",new{page  = id});
         }
     }       
 }

@@ -126,7 +126,7 @@ namespace Blog.SqlServerDAL
         {
           //定义插入数据的参数数组
               SqlParameter[] p=new SqlParameter[]{
-              new SqlParameter("@Comment_id",t_Comment.Comment_id),
+             
               new SqlParameter("@Author",t_Comment.Author),
               new SqlParameter("@Blog_id",t_Comment.Blog_id),
               new SqlParameter("@Ip",t_Comment.Ip),
@@ -135,7 +135,7 @@ namespace Blog.SqlServerDAL
               new SqlParameter("@Body",t_Comment.Body),
               new SqlParameter("@Islock",t_Comment.Islock)
            };
-           int i=SqlDBHelp.GetExecute("insert into Comments values (@Comment_id,@Author,@Blog_id,@Ip,@Datecreated,@Datemodified,@Body,@Islock)", p) ;
+              int i = SqlDBHelp.GetExecute("insert into Comments(Author,Blog_id,Ip,Datecreated,Datemodified,Body,Islock) values (@Author,@Blog_id,@Ip,@Datecreated,@Datemodified,@Body,@Islock)", p);
            return i;
         }
         

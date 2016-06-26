@@ -27,18 +27,18 @@ namespace UI
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
         }
-        protected void Application_Error(object sender,EventArgs e)
+        protected void Application_Error(object sender, EventArgs e)
         {
             AuthorEntity entity = (AuthorEntity)Session["userinfo"];
 
             LogEntity logentity = new LogEntity();
-            if(entity==null)
+            if (entity == null)
             {
-                logentity.Author_id=1;
+                logentity.Author_id = 1;
             }
             else
             {
-                logentity.Author_id=entity.Author_id;
+                logentity.Author_id = entity.Author_id;
             }
             logentity.Date = DateTime.Now;
             logentity.Opevent = Server.GetLastError().ToString();
@@ -52,17 +52,17 @@ namespace UI
             RouteData routeData = new RouteData();
             routeData.Values.Add("controller", "Error");
 
-            if(httpException==null)
+            if (httpException == null)
             {
                 routeData.Values.Add("action", "Index");
             }
             else
             {
-                if(httpException.GetHttpCode()==404)
+                if (httpException.GetHttpCode() == 404)
                 {
                     routeData.Values.Add("action", "HttpErrorFor404");
                 }
-                else if(httpException.GetHttpCode()==500)
+                else if (httpException.GetHttpCode() == 500)
                 {
                     routeData.Values.Add("action", "HttpErrorFor500");
                 }

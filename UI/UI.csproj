@@ -301,7 +301,10 @@
     <Content Include="Views\Admin\AdminTagCreate.aspx" />
     <Content Include="Views\Admin\AdminTagEdit.aspx" />
     <Content Include="Views\Admin\AdminTags.aspx" />
+    <Content Include="Views\Blog\BlogArticles.aspx" />
+    <Content Include="Views\Blog\BlogByMonth.aspx" />
     <Content Include="Views\Blog\BlogByTag.aspx" />
+    <Content Include="Views\Blog\BlogEntry.aspx" />
     <Content Include="Views\Blog\Index.aspx" />
     <Content Include="Views\Error\Index.aspx" />
     <Content Include="Views\Home\ViewPage1.aspx" />
@@ -340,6 +343,8 @@
     <Content Include="Views\Shared\Admin.Master" />
     <Content Include="Views\Shared\Page.Master" />
     <Content Include="Web.sitemap" />
+    <Content Include="Views\Shared\LeftRightPage.Master" />
+    <Content Include="Views\Shared\LeftRightAdmin.Master" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

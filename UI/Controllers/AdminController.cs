@@ -11,9 +11,31 @@ namespace UI.Controllers
 {
     public class AdminController : Controller
     {
+        public string GetmodelName()
+        {
+            AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+            ModelEntity me = ModelManager.GetAllModel().Select(p => p).Where(p => p.Name == entity.Username).First();
+            if(me==null)
+            {
+                return "Page";
+            }
+            else
+            {
+                return me.Path;
+            }
+            
+        }
         //
         // GET: /Admin/
 
+        public void ApplicationSetting()
+        {
+            AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+            int authorID = entity.Author_id;
+            ViewData["Tags"] = TagManager.GetAllTag().Select(p => p).Where(p => p.Author_id == authorID);
+
+
+        }
         public ActionResult Index(string sort,int? page)
         {
             if(Session["userinfo"]==null)
@@ -37,9 +59,9 @@ namespace UI.Controllers
                 //}
                
                 //
+
                
-               
-               return View(model);
+               return View("Index",GetmodelName(),model);
             }
             
         }
@@ -246,6 +268,11 @@ namespace UI.Controllers
                 model.Rss_size = int.Parse(form["rss_size"]);
                 model.Max_uploadfile = int.Parse(form["max_uploadfile"]);
                 PersonsettingManager.UpdatePersonsetting(model);
+                
+                int modelid = int.Parse(form["model_id"].ToString());
+                ModelEntity me = ModelManager.SelectModelByID(modelid);
+                me.Path = form["changSkin"];
+                ModelManager.UpdateModel(me);
 
                 return RedirectToAction("index", new { page = "1" });
             }
@@ -313,5 +340,6 @@ namespace UI.Controllers
             LogEntity log = LogManager.SelectLogByID(id);
             return View(log);
         }
+ 
     }
 }

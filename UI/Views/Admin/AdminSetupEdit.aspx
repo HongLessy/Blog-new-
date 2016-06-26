@@ -1,5 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Admin.Master" Inherits="System.Web.Mvc.ViewPage<Blog.Model.PersonsettingEntity>" %>
-
+<%@ Import Namespace="Blog.Model" %>
+<%@ Import Namespace="Blog.BLL" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolderPage" runat="server">
 
        <h3>设置基本信息</h3>
@@ -37,7 +38,26 @@
                     <%= Html.TextBox("max_uploadfile", Model.Max_uploadfile, new { size = 37 })%>
                     <%= Html.ValidationMessage("max_uploadfile")%>
                 </p>
-                
+                <p>
+                    <%
+                        AuthorEntity entity = (AuthorEntity)Session["userinfo"];
+                        var models=ModelManager.GetAllModel();
+                        ModelEntity me = models.Select(p => p).Where(p => p.Name == entity.Username).First();
+                        
+                     %>
+                    <label for="changSkin">修改皮肤：</label>
+                    <input  type="hidden" name="model_id" value="<%= me.Model_id%>"/>
+                    <select name="changSkin">
+                    <% if (me.Path == "Page")
+                       {%>
+                        <option value="Admin" selected="selected">右列表风格</option>
+                        <option value="LeftRightAdmin">左列表风格</option>
+                    <%}else{ %>
+                        <option value="Admin">右列表风格</option>
+                        <option value="LeftRightAdmin" selected="selected">左列表风格</option>
+                    <%} %>
+                    </select>
+                </p>
                 
                 <p>
                     <input type="submit" value="修改" class="button"  />

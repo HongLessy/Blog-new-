@@ -1,11 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Page.Master" Inherits="System.Web.Mvc.ViewPage<IEnumerable<Blog.Model.BlogentrieEntity>>" %>
 <%@ Import Namespace="Blog.Model" %>
 <%@ Import Namespace="Blog.BLL" %>
-
-
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolderPage" runat="server">
 
- <% foreach( var post in Model    ){ %>
+<% foreach( var post in Model    ){ %>
 
  <div class="post">
       <div class="header">
@@ -17,7 +15,7 @@
         <%
             int authorid = (int)Session["visitor"];  
             AuthorEntity author= AuthorManager.SelectAuthorByID(authorid);
-            var tags = Blog_TagManager.SelectBlog_TagByBlogID(post.Blog_id);
+            var tags= Blog_TagManager.SelectBlog_TagByBlogID(post.Blog_id);
             
         %>
         <% =post.Body  %>
@@ -42,10 +40,9 @@
 
 
 <% } %>
-
-<% =Html.ActionLink("<-- 前一页", "Index", new { page = (int)ViewData["page"] - 1 })%>
+<% =Html.ActionLink("<< 前一页", "BlogArticles", new { page = (int)ViewData["page"] - 1 })%>
 |
-<% =Html.ActionLink("后一页 -->", "Index", new { page = (int)ViewData["page"] + 1 })%>
+<% =Html.ActionLink("后一页 >>", "BlogArticles", new { page = (int)ViewData["page"] + 1 })%>
 
 
 </asp:Content>

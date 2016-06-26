@@ -80,12 +80,12 @@ namespace Blog.SqlServerDAL
         
         public  int UpdateModel(ModelEntity t_Model)
         {
-            SqlParameter[] p=new SqlParameter[]{
-            new SqlParameter("@Model_id",t_Model.Model_id),
+            SqlParameter[] p=new SqlParameter[]{ 
+            new SqlParameter("@Model_id",t_Model.Model_id),	
             new SqlParameter("@Name",t_Model.Name),
             new SqlParameter("@Path",t_Model.Path)
             };
-            int i=SqlDBHelp.GetExecute("update Model set model_id=@Model_id,name=@Name,path=@Path where model_id=@Model_id", p) ;
+            int i=SqlDBHelp.GetExecute("update Model set name=@Name,path=@Path where model_id=@Model_id", p) ;
             return i;
         }
         
